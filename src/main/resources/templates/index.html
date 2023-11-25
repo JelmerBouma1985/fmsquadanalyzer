@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>FM24 Analyzer</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css">
+</head>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js"></script>
+<body>
+<div>
+    <h2>Football manager analyzer</h2>
+    <br>
+    <!-- Nav pills -->
+    <ul class="nav nav-pills" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="pill" href="#upload">Upload</a>
+        </li>
+        <li th:attr="class=${players == null ? 'disabled' : 'nav-item'}">
+            <a class="nav-link" th:classappend="${players == null ? 'disabled' : ''}" data-toggle="pill" href="#squad">Squad</a>
+        </li>
+        <li th:attr="class=${scoutedPlayers == null ? 'disabled' : 'nav-item'}">
+            <a class="nav-link" th:classappend="${scoutedPlayers == null ? 'disabled' : ''}" data-toggle="pill" href="#scouting">Player search</a>
+        </li>
+        <li th:attr="class=${staff == null ? 'disabled' : 'nav-item'}">
+            <a class="nav-link" th:classappend="${staff == null ? 'disabled' : ''}" data-toggle="pill" href="#staff">Player search</a>
+        </li>
+    </ul>
+</div>
+<div class="tab-content">
+    <div id="upload" class="tab-pane" th:classappend="${players == null ? 'active' : 'fade'}">
+        <form method="post" th:action="@{/}" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="squadFile">Squad</label>
+                <input type="file" class="form-control-file" id="squadFile" name="squadFile" required>
+                <label for="tacticFile">Tactic</label>
+                <input type="file" class="form-control-file" id="tacticFile" name="tacticFile" required>
+                <label for="scoutFile">Player Search</label>
+                <input type="file" class="form-control-file" id="scoutFile" name="scoutFile">
+            </div>
+            <button type="submit" class="btn btn-primary">Upload data</button>
+        </form>
+    </div>
+    <div th:if="${players != null}" id="squad" class="tab-pane" th:classappend="${players == null ? 'fade' : 'active'}"><br>
+        <table class="table table-striped table-bordered"  id="sortTable">
+            <thead class="thead-dark">
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Position</th>
+                <th scope="col">Role</th>
+                <th scope="col">Duty</th>
+                <th scope="col">Score</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="player: ${players}">
+                <td th:text="${player.name}" />
+                <td th:text="${player.position}" />
+                <td th:text="${player.role}" />
+                <td th:text="${player.duty}" />
+                <td th:text="${player.score}" />
+            </tr>
+            </tbody>
+        </table>
+        <script>
+            $('#sortTable').DataTable({
+                paging: false
+            });
+        </script>
+    </div>
+    <div th:if="${players != null} AND ${scoutedPlayers != null}" id="scouting" class="tab-pane fade"><br>
+        <table class="table table-striped table-bordered"  id="scoutingTable">
+            <thead class="thead-dark">
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Transfer value</th>
+                <th scope="col">Salary</th>
+                <th scope="col" colspan="2" th:text="${header.column1}"/>
+                <th scope="col" colspan="2" th:text="${header.column2}"/>
+                <th scope="col" colspan="2" th:text="${header.column3}"/>
+                <th scope="col" colspan="2" th:text="${header.column4}"/>
+                <th scope="col" colspan="2" th:text="${header.column5}"/>
+                <th scope="col" colspan="2" th:text="${header.column6}"/>
+                <th scope="col" colspan="2" th:text="${header.column7}"/>
+                <th scope="col" colspan="2" th:text="${header.column8}"/>
+                <th scope="col" colspan="2" th:text="${header.column9}"/>
+                <th scope="col" colspan="2" th:text="${header.column10}"/>
+                <th scope="col" colspan="2" th:text="${header.column11}"/>
+            </tr>
+            <tr>
+                <th scope="col"></th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+                <th scope="col" th:text="min"/>
+                <th scope="col" th:text="max"/>
+                <th scope="col" th:text="min"/>
+                <th scope="col" th:text="max"/>
+                <th scope="col" th:text="min"/>
+                <th scope="col" th:text="max"/>
+                <th scope="col" th:text="min"/>
+                <th scope="col" th:text="max"/>
+                <th scope="col" th:text="min"/>
+                <th scope="col" th:text="max"/>
+                <th scope="col" th:text="min"/>
+                <th scope="col" th:text="max"/>
+                <th scope="col" th:text="min"/>
+                <th scope="col" th:text="max"/>
+                <th scope="col" th:text="min"/>
+                <th scope="col" th:text="max"/>
+                <th scope="col" th:text="min"/>
+                <th scope="col" th:text="max"/>
+                <th scope="col" th:text="min"/>
+                <th scope="col" th:text="max"/>
+                <th scope="col" th:text="min"/>
+                <th scope="col" th:text="max"/>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="player: ${scoutedPlayers}">
+                <td th:text="${player.name}" />
+                <td th:text="${player.transferValue}" />
+                <td th:text="${player.salary}" />
+                <td th:text="${player.position1Min}" />
+                <td th:text="${player.position1Max}" />
+                <td th:text="${player.position2Min}" />
+                <td th:text="${player.position2Max}" />
+                <td th:text="${player.position3Min}" />
+                <td th:text="${player.position3Max}" />
+                <td th:text="${player.position4Min}" />
+                <td th:text="${player.position4Max}" />
+                <td th:text="${player.position5Min}" />
+                <td th:text="${player.position5Max}" />
+                <td th:text="${player.position6Min}" />
+                <td th:text="${player.position6Max}" />
+                <td th:text="${player.position7Min}" />
+                <td th:text="${player.position7Max}" />
+                <td th:text="${player.position8Min}" />
+                <td th:text="${player.position8Max}" />
+                <td th:text="${player.position9Min}" />
+                <td th:text="${player.position9Max}" />
+                <td th:text="${player.position10Min}" />
+                <td th:text="${player.position10Max}" />
+                <td th:text="${player.position11Min}" />
+                <td th:text="${player.position11Max}" />
+            </tr>
+            </tbody>
+        </table>
+        <script>
+            $('#scoutingTable').DataTable({
+                paging: true
+
+            });
+        </script>
+    </div>
+</div>
+</body>
+</html>
