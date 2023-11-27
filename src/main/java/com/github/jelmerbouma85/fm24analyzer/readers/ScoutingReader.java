@@ -5,6 +5,7 @@ import com.github.jelmerbouma85.fm24analyzer.domain.enums.Attributes;
 import com.github.jelmerbouma85.fm24analyzer.domain.enums.Position;
 import com.github.jelmerbouma85.fm24analyzer.domain.scouting.ScoutAttribute;
 import com.github.jelmerbouma85.fm24analyzer.domain.scouting.ScoutPlayer;
+import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -18,6 +19,7 @@ import java.util.*;
 import static com.github.jelmerbouma85.fm24analyzer.domain.enums.Position.DM;
 import static com.github.jelmerbouma85.fm24analyzer.domain.enums.Position.GK;
 
+@Slf4j
 @Component
 public class ScoutingReader {
 
@@ -31,7 +33,7 @@ public class ScoutingReader {
                 final List<ScoutPlayer> players = new ArrayList<>();
                 for (Element row : rows) {
                     final var tableData = row.select("td");
-                    if (!tableData.isEmpty()) {
+                    if (!tableData.isEmpty() && !tableData.stream().allMatch(element -> element.text().isBlank())) {
                         var player = ScoutPlayer.builder()
                                 .name(tableData.get(localCache.getScoutPlayerAttributeLocation("Name")).text())
                                 .transferValue(tableData.get(localCache.getScoutPlayerAttributeLocation("Transfer Value")).text())
