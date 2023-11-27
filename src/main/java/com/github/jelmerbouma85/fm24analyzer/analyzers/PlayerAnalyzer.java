@@ -28,7 +28,7 @@ public class PlayerAnalyzer {
         this.attributeProperties = attributeProperties;
     }
 
-    public MultiValueMap<Position, PlayerPositionalScore> analyzePlayers(final Squad squad, final List<TacticPosition> tacticPositions) {
+    public MultiValueMap<Position, PlayerPositionalScore> analyzeOverallBest11(final Squad squad, final List<TacticPosition> tacticPositions) {
         final MultiValueMap<Position, PlayerPositionalScore> positionalRatings = new LinkedMultiValueMap<>();
         for (var position : tacticPositions) {
             var players = getCorrectPlayers(position.getPosition(), squad);
@@ -40,6 +40,25 @@ public class PlayerAnalyzer {
                         .build();
 
                 positionalRatings.add(position.getPosition(), playerScore);
+            }
+        }
+        return positionalRatings;
+    }
+
+    public MultiValueMap<Position, PlayerPositionalScore> analyzeCurrentBest11(final Squad squad, final List<TacticPosition> tacticPositions) {
+        final MultiValueMap<Position, PlayerPositionalScore> positionalRatings = new LinkedMultiValueMap<>();
+        for (var position : tacticPositions) {
+            var players = getCorrectPlayers(position.getPosition(), squad);
+            for (var player : players) {
+                if (!player.isInjured()) {
+                    var playerScore = PlayerPositionalScore.builder()
+                            .player(player)
+                            .position(position)
+                            .score(analyzePlayer(position, player))
+                            .build();
+
+                    positionalRatings.add(position.getPosition(), playerScore);
+                }
             }
         }
         return positionalRatings;

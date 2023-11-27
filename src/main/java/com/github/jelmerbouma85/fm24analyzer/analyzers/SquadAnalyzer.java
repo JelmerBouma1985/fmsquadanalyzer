@@ -1,7 +1,5 @@
 package com.github.jelmerbouma85.fm24analyzer.analyzers;
 
-import com.github.jelmerbouma85.fm24analyzer.analyzers.PlayerAnalyzer;
-import com.github.jelmerbouma85.fm24analyzer.comparators.PlayerPositionalScoreComparator;
 import com.github.jelmerbouma85.fm24analyzer.domain.PlayerPositionalScore;
 import com.github.jelmerbouma85.fm24analyzer.domain.Squad;
 import com.github.jelmerbouma85.fm24analyzer.domain.Tactic;
@@ -14,10 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -33,8 +28,15 @@ public class SquadAnalyzer {
         this.playerAnalyzer = playerAnalyzer;
     }
 
-    public Set<Tactic> buildBestSquads(final Squad squad, final List<TacticPosition> positions) {
-        final var positionalRatings = playerAnalyzer.analyzePlayers(squad, positions);
+    public Set<Tactic> buildOverallBestSquad(final Squad squad, final List<TacticPosition> positions) {
+        final var positionalRatings = playerAnalyzer.analyzeOverallBest11(squad, positions);
+
+        final var tactic = new Tactic();
+        return buildTactics(tactic, positions, positionalRatings, new HashSet<>());
+    }
+
+    public Set<Tactic> buildCurrentBestSquad(final Squad squad, final List<TacticPosition> positions) {
+        final var positionalRatings = playerAnalyzer.analyzeCurrentBest11(squad, positions);
 
         final var tactic = new Tactic();
         return buildTactics(tactic, positions, positionalRatings, new HashSet<>());

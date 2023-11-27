@@ -47,11 +47,12 @@ public class HtmlOutputService {
         final var localCache = new LocalCache();
         final var squad = playerReader.readPlayerFromHtml(squadInputstream, localCache);
         final var tacticPositions = tacticReader.readTacticFromHtml(tacticInputStream);
-        final var scoutPlayers = scoutingReader.readPlayersFromHtml(scoutPlayersInputStream, localCache);
 
-        final var tactics = service.buildBestSquads(squad, tacticPositions);
+        final var scoutPlayers = scoutingReader.readPlayersFromHtml(scoutPlayersInputStream, localCache);
         final var scoutedPlayers = scoutPlayerAnalyzer.analyzePlayers(scoutPlayers, tacticPositions);
-        var squadDto = tactics.stream()
+
+        final var overallBestTactic = service.buildOverallBestSquad(squad, tacticPositions);
+        var overallbestSquadDto = overallBestTactic.stream()
                 .max(new TacticComparator())
                 .stream()
                 .flatMap(t -> t.getPlayers().stream())
@@ -59,8 +60,18 @@ public class HtmlOutputService {
                 .map(p -> new SquadPlayerDtoMapper().apply(p))
                 .toList();
 
-        model.addAttribute("players", squadDto);
-        model.addAttribute("header", addHeaders(squadDto, tacticPositions));
+        final var currentBestTactic = service.buildCurrentBestSquad(squad, tacticPositions);
+        var currentBestSquadDto = currentBestTactic.stream()
+                .max(new TacticComparator())
+                .stream()
+                .flatMap(t -> t.getPlayers().stream())
+                .sorted(new PlayerPositionalScoreComparator())
+                .map(p -> new SquadPlayerDtoMapper().apply(p))
+                .toList();
+
+        model.addAttribute("players", overallbestSquadDto);
+        model.addAttribute("currentPlayers", currentBestSquadDto);
+        model.addAttribute("header", addHeaders(overallbestSquadDto, tacticPositions));
         model.addAttribute("scoutedPlayers", getScoutPlayerDto(scoutedPlayers, tacticPositions));
     }
 

@@ -9,6 +9,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -31,9 +32,10 @@ public class PlayerReader {
                 final var tableData = row.select("td");
                 if (!tableData.isEmpty()) {
                     var player = Player.builder()
-                            .name(tableData.get(localCache.getSquadPlayerNameLocation()).text().replaceAll(" - Pick Player", ""))
-                            .age(Integer.parseInt(tableData.get(localCache.getPlayerAgeLocation()).text()))
-                            .positions(getPlayablePositions(tableData.get(localCache.getSquadPlayablePositions()).text()))
+                            .name(tableData.get(localCache.getSquadPlayerAttributeLocation("Player")).text().replaceAll(" - Pick Player", ""))
+                            .age(Integer.parseInt(tableData.get(localCache.getSquadPlayerAttributeLocation("Age")).text()))
+                            .positions(getPlayablePositions(tableData.get(localCache.getSquadPlayerAttributeLocation("Position")).text()))
+                            .injured(!tableData.get(localCache.getSquadPlayerAttributeLocation("Injury")).text().replaceAll("-", "").isEmpty())
                             .attributes(getAttributes(tableData, localCache))
                             .build();
                     players.add(player);

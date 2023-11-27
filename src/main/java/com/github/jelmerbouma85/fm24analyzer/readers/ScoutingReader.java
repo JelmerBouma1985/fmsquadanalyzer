@@ -33,10 +33,10 @@ public class ScoutingReader {
                     final var tableData = row.select("td");
                     if (!tableData.isEmpty()) {
                         var player = ScoutPlayer.builder()
-                                .name(tableData.get(localCache.getScoutPlayerNameLocation()).text())
-                                .transferValue(tableData.get(localCache.getScoutTransferValue()).text())
-                                .salary(tableData.get(localCache.getScoutSalary()).text())
-                                .positions(getPlayablePositions(tableData.get(localCache.getScoutPlayablePositions()).text()))
+                                .name(tableData.get(localCache.getScoutPlayerAttributeLocation("Name")).text())
+                                .transferValue(tableData.get(localCache.getScoutPlayerAttributeLocation("Transfer Value")).text())
+                                .salary(tableData.get(localCache.getScoutPlayerAttributeLocation("Salary")).text())
+                                .positions(getPlayablePositions(tableData.get(localCache.getScoutPlayerAttributeLocation("Position")).text()))
                                 .attributes(getAttributes(tableData, localCache))
                                 .build();
                         players.add(player);

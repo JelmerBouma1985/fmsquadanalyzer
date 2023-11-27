@@ -26,8 +26,12 @@
         <li class="nav-item">
             <a class="nav-link" data-toggle="pill" href="#upload">Upload</a>
         </li>
-        <li th:attr="class=${players == null ? 'disabled' : 'nav-item'}">
-            <a class="nav-link" th:classappend="${players == null ? 'disabled' : ''}" data-toggle="pill" href="#squad">Squad</a>
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Squad</a>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" href="#squad" data-toggle="tab">Overall Best 11</a>
+                <a class="dropdown-item" href="#currentBest11Squad" data-toggle="tab">Current Best 11</a>
+            </div>
         </li>
         <li th:attr="class=${scoutedPlayers == null ? 'disabled' : 'nav-item'}">
             <a class="nav-link" th:classappend="${scoutedPlayers == null ? 'disabled' : ''}" data-toggle="pill" href="#scouting">Player search</a>
@@ -49,6 +53,7 @@
         </form>
     </div>
     <div th:if="${players != null}" id="squad" class="tab-pane" th:classappend="${players == null ? 'fade' : 'active'}"><br>
+        <h2>Best 11</h2>
         <table class="table table-striped table-bordered"  id="sortTable">
             <thead class="thead-dark">
             <tr>
@@ -71,6 +76,34 @@
         </table>
         <script>
             $('#sortTable').DataTable({
+                paging: false
+            });
+        </script>
+    </div>
+    <div th:if="${players != null}" id="currentBest11Squad" class="tab-pane" th:classappend="${currentPlayers == null ? 'fade' : 'active'}"><br>
+        <h2>Best 11 without injuries</h2>
+        <table class="table table-striped table-bordered"  id="currentBest11SquadTable">
+            <thead class="thead-dark">
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Position</th>
+                <th scope="col">Role</th>
+                <th scope="col">Duty</th>
+                <th scope="col">Score</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="player: ${currentPlayers}">
+                <td th:text="${player.name}" />
+                <td th:text="${player.position}" />
+                <td th:text="${player.role}" />
+                <td th:text="${player.duty}" />
+                <td th:text="${player.score}" />
+            </tr>
+            </tbody>
+        </table>
+        <script>
+            $('#currentBest11SquadTable').DataTable({
                 paging: false
             });
         </script>
