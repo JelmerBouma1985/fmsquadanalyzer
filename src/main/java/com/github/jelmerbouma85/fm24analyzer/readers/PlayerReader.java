@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static com.github.jelmerbouma85.fm24analyzer.domain.enums.Position.*;
@@ -30,7 +31,7 @@ public class PlayerReader {
             localCache.setSquadHeaderElements(rows.select("th"));
             for (Element row : rows) {
                 final var tableData = row.select("td");
-                if (!tableData.isEmpty()) {
+                if (!tableData.isEmpty() && isPlayerNotOnTrial(tableData, localCache)) {
                     var player = Player.builder()
                             .name(tableData.get(localCache.getSquadPlayerAttributeLocation("Player")).text().replaceAll(" - Pick Player", ""))
                             .age(Integer.parseInt(tableData.get(localCache.getSquadPlayerAttributeLocation("Age")).text()))
@@ -62,6 +63,15 @@ public class PlayerReader {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private boolean isPlayerNotOnTrial(final Elements tabledata, LocalCache localCache) {
+        for (Attributes attribute : Arrays.stream(Attributes.values()).filter(att -> !List.of(Attributes.OVO, Attributes.LTH).contains(att)).toList()) {
+            if (!Pattern.compile("\\d+").matcher(tabledata.get(localCache.getSquadPlayerAttributeLocation(attribute.name())).text()).matches()) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private Set<Position> getPlayablePositions(String position) {
