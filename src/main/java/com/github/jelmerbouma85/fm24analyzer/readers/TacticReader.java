@@ -6,9 +6,9 @@ import com.github.jelmerbouma85.fm24analyzer.domain.enums.Position;
 import com.github.jelmerbouma85.fm24analyzer.domain.enums.Role;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.springframework.stereotype.Component;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
@@ -28,11 +28,11 @@ public class TacticReader {
             final List<TacticPosition> tacticalPositions = new ArrayList<>();
             for (Element row : rows) {
                 final var tableData = row.select("td");
-                if (!tableData.isEmpty() && !tableData.get(0).text().isBlank() && !tableData.get(0).text().matches("S(\\d+)")) {
+                if (isPlayablePosition(tableData, rows)) {
                     var tacticPosition = TacticPosition.builder()
-                            .position(Position.valueOf(tableData.get(0).text()))
-                            .role(getRole(tableData.get(1)))
-                            .duty(getDuty(tableData.get(1)))
+                            .position(Position.valueOf(tableData.get(getHeaderIndex("Position Selected", rows)).text()))
+                            .role(getRole(tableData.get(getHeaderIndex("Position/Role/Duty", rows))))
+                            .duty(getDuty(tableData.get(getHeaderIndex("Position/Role/Duty", rows))))
                             .build();
                     tacticalPositions.add(tacticPosition);
                 }
@@ -49,5 +49,20 @@ public class TacticReader {
 
     private Duty getDuty(final Element tableData) {
         return Duty.valueOf(tableData.text().split("\\(")[1].replace(")", "").trim().toUpperCase(Locale.ROOT));
+    }
+
+    private  boolean isPlayablePosition(final Elements tableData, final Elements headers) {
+        if(tableData.isEmpty()) {
+            return false;
+        }
+        final String position = tableData.get(getHeaderIndex("Position Selected", headers)).text();
+        return !position.isBlank()
+                && !position.matches("S(\\d+)")
+                && !position.trim().equalsIgnoreCase("-");
+
+    }
+    private int getHeaderIndex(final String name, final Elements rows) {
+        final var headers = rows.select("th");
+        return headers.indexOf(headers.stream().filter(header -> header.text().equalsIgnoreCase(name)).findFirst().orElseThrow());
     }
 }
