@@ -6,6 +6,7 @@ import com.github.jelmerbouma85.fm24analyzer.domain.PlayerPositionalScore;
 import com.github.jelmerbouma85.fm24analyzer.domain.Squad;
 import com.github.jelmerbouma85.fm24analyzer.domain.TacticPosition;
 import com.github.jelmerbouma85.fm24analyzer.domain.enums.Attributes;
+import com.github.jelmerbouma85.fm24analyzer.domain.enums.Condition;
 import com.github.jelmerbouma85.fm24analyzer.domain.enums.Position;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
@@ -20,6 +21,8 @@ import java.util.Set;
 @Service
 public class PlayerAnalyzer {
 
+    private static final Set<String> INJURED_AND_INTERLAND_STATUS = Set.of("Inj", "Int");
+    private static final Set<Condition> GOOD_CONDITION = Set.of(Condition.EXCELLENT, Condition.PEAK);
     private static final BigDecimal MULITPLIER_14 = new BigDecimal("14").setScale(2, RoundingMode.HALF_UP);
     private static final BigDecimal MULITPLIER_20 = new BigDecimal("20").setScale(2, RoundingMode.HALF_UP);
     private final AttributeProperties attributeProperties;
@@ -50,7 +53,7 @@ public class PlayerAnalyzer {
         for (var position : tacticPositions) {
             var players = getCorrectPlayers(position.getPosition(), squad);
             for (var player : players) {
-                if (!player.isInjured()) {
+                if (isPlayerAvailableAndFit(player)) {
                     var playerScore = PlayerPositionalScore.builder()
                             .player(player)
                             .position(position)
@@ -62,6 +65,11 @@ public class PlayerAnalyzer {
             }
         }
         return positionalRatings;
+    }
+
+    private boolean isPlayerAvailableAndFit(final Player player) {
+        return player.getStatus().stream().noneMatch(INJURED_AND_INTERLAND_STATUS::contains)
+                && GOOD_CONDITION.contains(player.getCondition());
     }
 
     private Set<Player> getCorrectPlayers(final Position position, final Squad squad) {

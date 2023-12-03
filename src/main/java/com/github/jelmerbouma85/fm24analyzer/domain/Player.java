@@ -1,6 +1,7 @@
 package com.github.jelmerbouma85.fm24analyzer.domain;
 
 import com.github.jelmerbouma85.fm24analyzer.domain.enums.Attributes;
+import com.github.jelmerbouma85.fm24analyzer.domain.enums.Condition;
 import com.github.jelmerbouma85.fm24analyzer.domain.enums.Position;
 import lombok.Builder;
 import lombok.Data;
@@ -15,7 +16,8 @@ public class Player {
 
     private String name;
     private int age;
-    private boolean injured;
+    private Set<String> status;
+    private Condition condition;
 
     @ToString.Exclude
     private Set<Position> positions;

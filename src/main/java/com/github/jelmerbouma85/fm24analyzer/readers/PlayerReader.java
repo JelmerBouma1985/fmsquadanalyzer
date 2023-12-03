@@ -4,6 +4,7 @@ import com.github.jelmerbouma85.fm24analyzer.config.LocalCache;
 import com.github.jelmerbouma85.fm24analyzer.domain.Player;
 import com.github.jelmerbouma85.fm24analyzer.domain.Squad;
 import com.github.jelmerbouma85.fm24analyzer.domain.enums.Attributes;
+import com.github.jelmerbouma85.fm24analyzer.domain.enums.Condition;
 import com.github.jelmerbouma85.fm24analyzer.domain.enums.Position;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
@@ -36,7 +37,8 @@ public class PlayerReader {
                             .name(tableData.get(localCache.getSquadPlayerAttributeLocation("Player")).text().replaceAll(" - Pick Player", ""))
                             .age(Integer.parseInt(tableData.get(localCache.getSquadPlayerAttributeLocation("Age")).text()))
                             .positions(getPlayablePositions(tableData.get(localCache.getSquadPlayerAttributeLocation("Position")).text()))
-                            .injured(!tableData.get(localCache.getSquadPlayerAttributeLocation("Injury")).text().replaceAll("-", "").isEmpty())
+                            .status(getStatusInfo(tableData, localCache))
+                            .condition(getCondition(tableData, localCache))
                             .attributes(getAttributes(tableData, localCache))
                             .build();
                     players.add(player);
@@ -63,6 +65,20 @@ public class PlayerReader {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private Set<String> getStatusInfo(final Elements tableData, final LocalCache localCache) {
+        final var playerStatus = tableData.get(localCache.getSquadPlayerAttributeLocation("Player Status")).text();
+        if (!playerStatus.isBlank()) {
+            return Arrays.stream(playerStatus.split("-"))
+                    .map(String::trim)
+                    .collect(Collectors.toSet());
+        }
+        return Collections.emptySet();
+    }
+
+    private Condition getCondition(final Elements tableData, final LocalCache localCache) {
+        return Condition.fromCode(tableData.get(localCache.getSquadPlayerAttributeLocation("CON")).text());
     }
 
     private boolean isPlayerNotOnTrial(final Elements tabledata, LocalCache localCache) {

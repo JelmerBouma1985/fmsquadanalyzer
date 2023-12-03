@@ -113,6 +113,7 @@
             <thead class="thead-dark">
             <tr>
                 <th scope="col">Name</th>
+                <th scope="col">Age</th>
                 <th scope="col">Transfer value</th>
                 <th scope="col">Salary</th>
                 <th scope="col" colspan="2" th:text="${header.column1}"/>
@@ -128,6 +129,7 @@
                 <th scope="col" colspan="2" th:text="${header.column11}"/>
             </tr>
             <tr>
+                <th scope="col"></th>
                 <th scope="col"></th>
                 <th scope="col"></th>
                 <th scope="col"></th>
@@ -158,6 +160,7 @@
             <tbody>
             <tr th:each="player: ${scoutedPlayers}">
                 <td th:text="${player.name}" />
+                <td th:text="${player.age}" />
                 <td th:text="${player.transferValue}" />
                 <td th:text="${player.salary}" />
                 <td th:text="${player.position1Min}" />

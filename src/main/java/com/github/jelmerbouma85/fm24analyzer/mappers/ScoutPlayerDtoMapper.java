@@ -20,6 +20,7 @@ public class ScoutPlayerDtoMapper implements BiFunction<ScoutPlayerPositionalSco
     public ScoutPlayerDto apply(ScoutPlayerPositionalScore scoutPlayerPositionalScore, List<TacticPosition> tacticPositions) {
         final var scoutPlayer = ScoutPlayerDto.builder()
                 .name(scoutPlayerPositionalScore.getPlayer().getName())
+                .age(scoutPlayerPositionalScore.getPlayer().getAge())
                 .transferValue(scoutPlayerPositionalScore.getPlayer().getTransferValue())
                 .salary(scoutPlayerPositionalScore.getPlayer().getSalary());
 

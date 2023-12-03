@@ -36,6 +36,7 @@ public class ScoutingReader {
                     if (!tableData.isEmpty() && !tableData.stream().allMatch(element -> element.text().isBlank())) {
                         var player = ScoutPlayer.builder()
                                 .name(tableData.get(localCache.getScoutPlayerAttributeLocation("Name")).text())
+                                .age(tableData.get(localCache.getScoutPlayerAttributeLocation("Age")).text())
                                 .transferValue(tableData.get(localCache.getScoutPlayerAttributeLocation("Transfer Value")).text())
                                 .salary(tableData.get(localCache.getScoutPlayerAttributeLocation("Salary")).text())
                                 .positions(getPlayablePositions(tableData.get(localCache.getScoutPlayerAttributeLocation("Position")).text()))

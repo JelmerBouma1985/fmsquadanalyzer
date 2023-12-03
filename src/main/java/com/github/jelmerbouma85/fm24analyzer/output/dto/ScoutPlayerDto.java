@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 public class ScoutPlayerDto {
 
     private String name;
+    private String age;
     private String transferValue;
     private String salary;
     private BigDecimal position1Min;

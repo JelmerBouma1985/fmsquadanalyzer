@@ -13,6 +13,7 @@ import java.util.Set;
 public class ScoutPlayer {
 
     private String name;
+    private String age;
     private String transferValue;
     private String salary;
 
