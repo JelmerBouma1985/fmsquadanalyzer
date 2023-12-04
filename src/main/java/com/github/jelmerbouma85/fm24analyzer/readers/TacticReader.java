@@ -7,6 +7,8 @@ import com.github.jelmerbouma85.fm24analyzer.domain.enums.Role;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -20,7 +22,8 @@ import java.util.Objects;
 @Component
 public class TacticReader {
 
-    public List<TacticPosition> readTacticFromHtml(final InputStream tacticInputStream) {
+    @Cacheable(cacheNames = "tacticCache", key = "#user")
+    public List<TacticPosition> readTacticFromHtml(final InputStream tacticInputStream, final String user) {
         try {
             final var document = Jsoup.parse(tacticInputStream, StandardCharsets.UTF_8.name(), "www.fm24analyzer.com");
             final var table = document.selectFirst("table");

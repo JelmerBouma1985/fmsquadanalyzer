@@ -5,9 +5,7 @@ import com.github.jelmerbouma85.fm24analyzer.analyzers.SquadAnalyzer;
 import com.github.jelmerbouma85.fm24analyzer.comparators.PlayerPositionalScoreComparator;
 import com.github.jelmerbouma85.fm24analyzer.comparators.TacticComparator;
 import com.github.jelmerbouma85.fm24analyzer.config.LocalCache;
-import com.github.jelmerbouma85.fm24analyzer.domain.Squad;
 import com.github.jelmerbouma85.fm24analyzer.domain.TacticPosition;
-import com.github.jelmerbouma85.fm24analyzer.domain.scouting.ScoutPlayer;
 import com.github.jelmerbouma85.fm24analyzer.domain.scouting.ScoutPlayerPositionalScore;
 import com.github.jelmerbouma85.fm24analyzer.mappers.ScoutPlayerDtoMapper;
 import com.github.jelmerbouma85.fm24analyzer.mappers.SquadPlayerDtoMapper;
@@ -17,6 +15,7 @@ import com.github.jelmerbouma85.fm24analyzer.output.dto.SquadPlayerDto;
 import com.github.jelmerbouma85.fm24analyzer.readers.PlayerReader;
 import com.github.jelmerbouma85.fm24analyzer.readers.ScoutingReader;
 import com.github.jelmerbouma85.fm24analyzer.readers.TacticReader;
+import com.github.jelmerbouma85.fm24analyzer.validators.HtmlInputValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
@@ -43,10 +42,10 @@ public class HtmlOutputService {
         this.playerReader = playerReader;
     }
 
-    public void buildTemplate(final Model model, final InputStream squadInputstream, final InputStream tacticInputStream, final InputStream scoutPlayersInputStream) {
+    public void buildTemplate(final String user, final Model model, final InputStream squadInputstream, final InputStream tacticInputStream, final InputStream scoutPlayersInputStream) {
         final var localCache = new LocalCache();
-        final var squad = playerReader.readPlayerFromHtml(squadInputstream, localCache);
-        final var tacticPositions = tacticReader.readTacticFromHtml(tacticInputStream);
+        final var squad = playerReader.readPlayerFromHtml(user, squadInputstream, localCache);
+        final var tacticPositions = tacticReader.readTacticFromHtml(tacticInputStream, user);
 
         final var scoutPlayers = scoutingReader.readPlayersFromHtml(scoutPlayersInputStream, localCache);
         final var scoutedPlayers = scoutPlayerAnalyzer.analyzePlayers(scoutPlayers, tacticPositions);

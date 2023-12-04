@@ -9,6 +9,8 @@ import com.github.jelmerbouma85.fm24analyzer.domain.enums.Position;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -23,7 +25,9 @@ import static com.github.jelmerbouma85.fm24analyzer.domain.enums.Position.*;
 
 @Component
 public class PlayerReader {
-    public Squad readPlayerFromHtml(final InputStream squadInputStream, final LocalCache localCache) {
+
+    @Cacheable(cacheNames = "squadCache", key = "#user")
+    public Squad readPlayerFromHtml(final String user, final InputStream squadInputStream, final LocalCache localCache) {
         try {
             final var document = Jsoup.parse(squadInputStream, StandardCharsets.UTF_8.name(), "www.fm24analyzer.com");
             final var table = document.selectFirst("table");
