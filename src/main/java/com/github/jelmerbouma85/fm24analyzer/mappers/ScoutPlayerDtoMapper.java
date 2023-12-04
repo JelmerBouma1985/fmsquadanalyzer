@@ -3,7 +3,7 @@ package com.github.jelmerbouma85.fm24analyzer.mappers;
 import com.github.jelmerbouma85.fm24analyzer.domain.TacticPosition;
 import com.github.jelmerbouma85.fm24analyzer.domain.enums.Position;
 import com.github.jelmerbouma85.fm24analyzer.domain.scouting.ScoutPlayerPositionalScore;
-import com.github.jelmerbouma85.fm24analyzer.output.dto.ScoutPlayerDto;
+import com.github.jelmerbouma85.fm24analyzer.service.dto.ScoutPlayerDto;
 
 import java.math.BigDecimal;
 import java.util.AbstractMap;

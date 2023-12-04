@@ -1,4 +1,4 @@
-package com.github.jelmerbouma85.fm24analyzer.output;
+package com.github.jelmerbouma85.fm24analyzer.service;
 
 import com.github.jelmerbouma85.fm24analyzer.analyzers.ScoutPlayerAnalyzer;
 import com.github.jelmerbouma85.fm24analyzer.analyzers.SquadAnalyzer;
@@ -9,16 +9,16 @@ import com.github.jelmerbouma85.fm24analyzer.domain.TacticPosition;
 import com.github.jelmerbouma85.fm24analyzer.domain.scouting.ScoutPlayerPositionalScore;
 import com.github.jelmerbouma85.fm24analyzer.mappers.ScoutPlayerDtoMapper;
 import com.github.jelmerbouma85.fm24analyzer.mappers.SquadPlayerDtoMapper;
-import com.github.jelmerbouma85.fm24analyzer.output.dto.ScoutPlayerColumnDto;
-import com.github.jelmerbouma85.fm24analyzer.output.dto.ScoutPlayerDto;
-import com.github.jelmerbouma85.fm24analyzer.output.dto.SquadPlayerDto;
+import com.github.jelmerbouma85.fm24analyzer.service.dto.ScoutPlayerColumnDto;
+import com.github.jelmerbouma85.fm24analyzer.service.dto.ScoutPlayerDto;
+import com.github.jelmerbouma85.fm24analyzer.service.dto.SquadPlayerDto;
 import com.github.jelmerbouma85.fm24analyzer.readers.PlayerReader;
 import com.github.jelmerbouma85.fm24analyzer.readers.ScoutingReader;
 import com.github.jelmerbouma85.fm24analyzer.readers.TacticReader;
-import com.github.jelmerbouma85.fm24analyzer.validators.HtmlInputValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
 import java.util.List;
@@ -33,16 +33,19 @@ public class HtmlOutputService {
     private final TacticReader tacticReader;
     private final ScoutPlayerAnalyzer scoutPlayerAnalyzer;
     private final PlayerReader playerReader;
+    private final CacheService cacheService;
 
-    public HtmlOutputService(SquadAnalyzer service, ScoutingReader scoutingReader, TacticReader tacticReader, ScoutPlayerAnalyzer scoutPlayerAnalyzer, PlayerReader playerReader) {
+    public HtmlOutputService(SquadAnalyzer service, ScoutingReader scoutingReader, TacticReader tacticReader, ScoutPlayerAnalyzer scoutPlayerAnalyzer, PlayerReader playerReader, CacheService cacheService) {
         this.service = service;
         this.scoutingReader = scoutingReader;
         this.tacticReader = tacticReader;
         this.scoutPlayerAnalyzer = scoutPlayerAnalyzer;
         this.playerReader = playerReader;
+        this.cacheService = cacheService;
     }
 
-    public void buildTemplate(final String user, final Model model, final InputStream squadInputstream, final InputStream tacticInputStream, final InputStream scoutPlayersInputStream) {
+    public void buildTemplate(final String user, final Model model, final MultipartFile squadInputstream, final MultipartFile tacticInputStream, final InputStream scoutPlayersInputStream) {
+        cacheService.evictCaches(user, squadInputstream, tacticInputStream);
         final var localCache = new LocalCache();
         final var squad = playerReader.readPlayerFromHtml(user, squadInputstream, localCache);
         final var tacticPositions = tacticReader.readTacticFromHtml(tacticInputStream, user);

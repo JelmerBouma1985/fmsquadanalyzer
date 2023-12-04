@@ -1,7 +1,7 @@
 package com.github.jelmerbouma85.fm24analyzer.mappers;
 
 import com.github.jelmerbouma85.fm24analyzer.domain.PlayerPositionalScore;
-import com.github.jelmerbouma85.fm24analyzer.output.dto.SquadPlayerDto;
+import com.github.jelmerbouma85.fm24analyzer.service.dto.SquadPlayerDto;
 
 import java.util.function.Function;
 

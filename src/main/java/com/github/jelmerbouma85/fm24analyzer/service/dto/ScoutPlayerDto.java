@@ -1,4 +1,4 @@
-package com.github.jelmerbouma85.fm24analyzer.output.dto;
+package com.github.jelmerbouma85.fm24analyzer.service.dto;
 
 import lombok.Builder;
 import lombok.Data;

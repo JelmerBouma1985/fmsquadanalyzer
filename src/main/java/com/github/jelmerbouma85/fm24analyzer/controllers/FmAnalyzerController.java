@@ -1,6 +1,6 @@
 package com.github.jelmerbouma85.fm24analyzer.controllers;
 
-import com.github.jelmerbouma85.fm24analyzer.output.HtmlOutputService;
+import com.github.jelmerbouma85.fm24analyzer.service.HtmlOutputService;
 import com.github.jelmerbouma85.fm24analyzer.readers.PlayerReader;
 import com.github.jelmerbouma85.fm24analyzer.readers.TacticReader;
 import com.github.jelmerbouma85.fm24analyzer.validators.HtmlInputValidator;
@@ -50,7 +50,7 @@ public class FmAnalyzerController {
         final var validationResult = htmlInputValidator.validateInput(user, squadFile, tacticFile);
         if (validationResult.isSquadAvailable() && validationResult.isTacticAvailable()) {
             final var scoutInputStream = Objects.nonNull(scoutFile) ? scoutFile.getInputStream() : InputStream.nullInputStream();
-            htmlOutputService.buildTemplate(user, model, squadFile.getInputStream(), tacticFile.getInputStream(), scoutInputStream);
+            htmlOutputService.buildTemplate(user, model, squadFile, tacticFile, scoutInputStream);
             return "index";
         } else {
             return "error";
