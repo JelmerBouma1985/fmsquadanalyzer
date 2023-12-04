@@ -21,7 +21,7 @@ import java.util.Set;
 @Service
 public class PlayerAnalyzer {
 
-    private static final Set<String> INJURED_AND_INTERLAND_STATUS = Set.of("Inj", "Int");
+    private static final Set<String> INJURED_AND_INTERLAND_STATUS = Set.of("Inj", "Int", "Sus");
     private static final Set<Condition> GOOD_CONDITION = Set.of(Condition.EXCELLENT, Condition.PEAK);
     private static final BigDecimal MULITPLIER_14 = new BigDecimal("14").setScale(2, RoundingMode.HALF_UP);
     private static final BigDecimal MULITPLIER_20 = new BigDecimal("20").setScale(2, RoundingMode.HALF_UP);
