@@ -52,7 +52,8 @@ public class FmAnalyzerController {
             final var scoutInputStream = Objects.nonNull(scoutFile) ? scoutFile.getInputStream() : InputStream.nullInputStream();
             htmlOutputService.buildTemplate(user, model, squadFile.getInputStream(), tacticFile.getInputStream(), scoutInputStream);
             return "index";
+        } else {
+            return "error";
         }
-        return "index";
     }
 }
