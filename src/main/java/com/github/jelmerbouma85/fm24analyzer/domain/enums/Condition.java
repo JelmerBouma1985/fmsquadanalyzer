@@ -7,6 +7,7 @@ public enum Condition {
     EXCELLENT("Excellent"),
     PEAK("Peak"),
     GOOD("Good"),
+    FAIR("Fair"),
     INJURED("Injured");
 
     private final String code;
