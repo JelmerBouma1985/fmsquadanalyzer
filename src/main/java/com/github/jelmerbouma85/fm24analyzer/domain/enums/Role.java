@@ -47,7 +47,7 @@ public enum Role {
     AM("Attacking Midfielder"),
     SS("Shadow Striker"),
     EG("Enganche"),
-    DLF("Deep-Lying Forward"),
+    DLF("Deep Lying Forward"),
     F9("False Nine"),
     P("Poacher"),
     TF("Target man"),

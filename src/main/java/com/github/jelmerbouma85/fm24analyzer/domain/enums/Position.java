@@ -10,6 +10,8 @@ public enum Position {
     DL,
     WBR,
     DM,
+    DMCR,
+    DMCL,
     WBL,
     MR,
     MC,
@@ -21,5 +23,7 @@ public enum Position {
     AMCR,
     AMCL,
     AML,
-    STC
+    STC,
+    STCR,
+    STCL
 }

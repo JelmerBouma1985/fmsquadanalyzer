@@ -57,7 +57,7 @@ public class PlayerReader {
             squad.setDc(players.stream().filter(player -> player.getPositions().stream().anyMatch(position -> Set.of(DCR, DC, DCL).contains(position))).collect(Collectors.toSet()));
             squad.setDl(players.stream().filter(player -> player.getPositions().contains(DL)).collect(Collectors.toSet()));
             squad.setWbr(players.stream().filter(player -> player.getPositions().contains(WBR)).collect(Collectors.toSet()));
-            squad.setDm(players.stream().filter(player -> player.getPositions().contains(DM)).collect(Collectors.toSet()));
+            squad.setDm(players.stream().filter(player -> player.getPositions().stream().anyMatch(position -> Set.of(DMCR, DM, DMCL).contains(position))).collect(Collectors.toSet()));
             squad.setWbl(players.stream().filter(player -> player.getPositions().contains(WBL)).collect(Collectors.toSet()));
             squad.setMr(players.stream().filter(player -> player.getPositions().contains(MR)).collect(Collectors.toSet()));
             squad.setMc(players.stream().filter(player -> player.getPositions().stream().anyMatch(position -> Set.of(MCR, MC, MCL).contains(position))).collect(Collectors.toSet()));
@@ -65,7 +65,7 @@ public class PlayerReader {
             squad.setAmr(players.stream().filter(player -> player.getPositions().contains(AMR)).collect(Collectors.toSet()));
             squad.setAmc(players.stream().filter(player -> player.getPositions().stream().anyMatch(position -> Set.of(AMCR, AMC, AMCL).contains(position))).collect(Collectors.toSet()));
             squad.setAml(players.stream().filter(player -> player.getPositions().contains(AML)).collect(Collectors.toSet()));
-            squad.setSc(players.stream().filter(player -> player.getPositions().contains(STC)).collect(Collectors.toSet()));
+            squad.setSc(players.stream().filter(player -> player.getPositions().stream().anyMatch(position -> Set.of(STCR, STC, STCL).contains(position))).collect(Collectors.toSet()));
 
             return squad;
         } catch (IOException e) {

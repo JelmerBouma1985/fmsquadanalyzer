@@ -104,11 +104,17 @@ public class ScoutPlayerDtoMapper implements BiFunction<ScoutPlayerPositionalSco
                 case DCR, DCL -> {
                     return DC.equals(position);
                 }
+                case DMCR, DMCL -> {
+                    return DM.equals(position);
+                }
                 case MCR, MCL -> {
                     return MC.equals(position);
                 }
                 case AMCR, AMCL -> {
                     return AMC.equals(position);
+                }
+                case STCR, STCL -> {
+                    return STC.equals(position);
                 }
                 default -> {
                     return tacticsPosition.equals(position);

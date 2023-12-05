@@ -89,7 +89,7 @@ public class PlayerAnalyzer {
             case WBR -> {
                 return squad.getWbr();
             }
-            case DM -> {
+            case DM, DMCR, DMCL -> {
                 return squad.getDm();
             }
             case WBL -> {
@@ -113,7 +113,7 @@ public class PlayerAnalyzer {
             case AML -> {
                 return squad.getAml();
             }
-            case STC -> {
+            case STC, STCR, STCL -> {
                 return squad.getSc();
             }
             default -> throw new IllegalArgumentException("Kan geen spelers ophale voor positie");

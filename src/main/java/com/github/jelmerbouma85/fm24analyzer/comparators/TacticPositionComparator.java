@@ -16,7 +16,9 @@ public class TacticPositionComparator implements Comparator<TacticPosition> {
             Position.DCL,
             Position.DL,
             Position.WBR,
+            Position.DMCR,
             Position.DM,
+            Position.DMCL,
             Position.WBL,
             Position.MR,
             Position.MCR,
@@ -28,7 +30,9 @@ public class TacticPositionComparator implements Comparator<TacticPosition> {
             Position.AMC,
             Position.AMCL,
             Position.AML,
-            Position.STC
+            Position.STCR,
+            Position.STC,
+            Position.STCL
     );
 
     @Override
